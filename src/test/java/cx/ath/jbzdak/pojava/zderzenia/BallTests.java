@@ -5,19 +5,6 @@ import org.junit.Test;
 
 public class BallTests {
 
-	Ball ballFromPositions(double x, double y){
-        return new Ball(
-                x, y, 0, 0, 0, 0
-        );
-    }
-
-    Ball ballFromPositions(double x, double y, double radius){
-        return new Ball(
-                x, y, 0, 0, 0, radius
-        );
-    }
-
-
     @Test
     public void testMove(){
         Ball ball = new Ball(0, 0, 1, 2, 5, 1);
@@ -69,25 +56,16 @@ public class BallTests {
         ));
     }
 
-    @Test
-    public void testNoCollision(){
-        Engine engine = new Engine();
-        engine.addBalls(new Ball(0, 0, 0, 1, 0, 1));
-        engine.addBalls(new Ball(0, 3, 0, -1, 0, 1));
-        engine.iterate(0.1);
-        Assert.assertEquals(engine.getBalls().get(0).getVY(), 1, 0.01);
-        Assert.assertEquals(engine.getBalls().get(1).getVY(), -1, 0.01);
-    }
-    
-    @Test
-    public void testCollision(){
-        Engine engine = new Engine();
-        engine.addBalls(new Ball(0, 0, 0, 1, 0, 1));
-        engine.addBalls(new Ball(0, 2, 0, -2, 0, 1));
-        engine.iterate(0.1);
-        Assert.assertEquals(engine.getBalls().get(0).getVY(), -2, 0.01);
-        Assert.assertEquals(engine.getBalls().get(1).getVY(), 1, 0.01);
+    Ball ballFromPositions(double x, double y){
+        return new Ball(
+                x, y, 0, 0, 0, 0
+        );
     }
 
-
+    Ball ballFromPositions(double x, double y, double radius){
+        return new Ball(
+                x, y, 0, 0, 0, radius
+        );
+    }
 }
+

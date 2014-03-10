@@ -3,20 +3,18 @@ package cx.ath.jbzdak.pojava.zderzenia;
 public class Ball {
 
     private double[] coords = new double[6];
-
-    private boolean collidedInLastIter = false;
-
-	public Ball(){}
 	
 	public Ball(double x, double y, double vx, double vy, double mass, double radius){
         coords = new double[]{x, y, vx, vy, mass, radius};
     }
+
 	public void iteration(double dt){
         coords[0]+=coords[2]*dt;
         coords[1]+=coords[3]*dt;
-        collidedInLastIter =false;
     }
 
+
+    public Ball(){}
 
     /**
      * There is error in this function, can you spot it?
@@ -31,8 +29,6 @@ public class Ball {
         }
         setVY(other.getVY());
         other.setVY(getVY());
-        collidedInLastIter =true;
-        other.collidedInLastIter =true;
     }
 
     
