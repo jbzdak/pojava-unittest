@@ -27,8 +27,10 @@ public class Ball {
         if(getMass() != other.getMass()){
             throw new IllegalStateException("For now balls must have equal mass");
         }
-        setVY(other.getVY());
-        other.setVY(getVY());
+        double vy = getVY();
+        double ovy = other.getVY();
+        setVY(ovy);
+        other.setVY(vy);
     }
 
     
