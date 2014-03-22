@@ -56,6 +56,20 @@ public class BallTests {
         ));
     }
 
+    @Test
+    public void testColliosion(){
+        Ball b1 = new Ball(0, 0, 0, 1, 0, 1);
+        Ball b2 = new Ball(0, 2, 0, -1, 0, 1);
+        b1.collision(b2);
+        Assert.assertEquals(b1.getVX(), 0, 0.001);
+        Assert.assertEquals(b2.getVX(), 0, 0.001);
+
+        Assert.assertEquals(b1.getVY(), -1, 0.001);
+        Assert.assertEquals(b2.getVY(), 1, 0.001);
+
+    }
+
+
     Ball ballFromPositions(double x, double y){
         return new Ball(
                 x, y, 0, 0, 0, 0

@@ -5,13 +5,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CollisionTest{
+public class CollisionTest {
 
     Engine engine;
 
     @Before
     public void setUp(){
-        engine = new Engine();
+        engine = new Engine(10, 10);
         engine.addBalls(new Ball(0, 0, 0, 1, 0, 1));
     }
 
@@ -30,5 +30,6 @@ public class CollisionTest{
         Assert.assertEquals(engine.getBalls().get(0).getVY(), -2, 0.01);
         Assert.assertEquals(engine.getBalls().get(1).getVY(), 1, 0.01);
     }
+
 
 }
