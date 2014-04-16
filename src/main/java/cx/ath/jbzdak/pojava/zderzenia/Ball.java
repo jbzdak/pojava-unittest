@@ -1,8 +1,11 @@
 package cx.ath.jbzdak.pojava.zderzenia;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+
 public class Ball {
 
-    private double[] coords = new double[6];
+    double[] coords = new double[6];
 	
 	public Ball(double x, double y, double vx, double vy, double mass, double radius){
         coords = new double[]{x, y, vx, vy, mass, radius};
@@ -17,23 +20,43 @@ public class Ball {
     public Ball(){}
 
     /**
-     * There is error in this function, can you spot it?
-     * @param other
+     * This is the copy constructor
+     * @param ball ball to be copied
      */
-    public void collision(Ball other){
-        if (getX() != other.getX()){
-            throw new IllegalStateException("For now balls may bounce only in 1D");
-        }
-        if(getMass() != other.getMass()){
-            throw new IllegalStateException("For now balls must have equal mass");
-        }
-        double vy = getVY();
-        double ovy = other.getVY();
-        setVY(ovy);
-        other.setVY(vy);
+    public Ball(Ball ball){
+        System.arraycopy(
+                ball.coords, 0,
+                coords, 0, coords.length
+        );
     }
 
-    
+    public void collision(Ball other){
+
+        ImmutablePair<Vector3D, Vector3D> collisionResults =
+                BallUtils.doCollision(this, other);
+
+        Vector3D thisV = collisionResults.getLeft();
+        Vector3D otherV = collisionResults.getRight();
+
+        this.setVX(thisV.getX());
+        this.setVY(thisV.getY());
+
+        other.setVX(otherV.getX());
+        other.setVY(otherV.getY());
+
+    }
+
+    /**
+     * Returns position as 3d vector with zeroed z coordinate
+     */
+    Vector3D getPosition(){
+        return new Vector3D(getX(), getY(), 0);
+    }
+
+
+    Vector3D getVelocity(){
+        return new Vector3D(getVX(), getVY(), 0);
+    }
 
     public double getX(){
         return coords[0];

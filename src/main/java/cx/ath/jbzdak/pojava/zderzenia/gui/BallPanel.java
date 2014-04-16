@@ -9,7 +9,6 @@ import java.util.Locale;
 
 public class BallPanel extends JPanel {
 
-
     private final int ballIdx;
     private final Ball ball;
 
@@ -21,8 +20,6 @@ public class BallPanel extends JPanel {
 
     JTextField mass = new JTextField(3);
     JTextField radius = new JTextField(3);
-
-
 
     public BallPanel(int ballIdx, Ball ball) {
         super();
@@ -49,6 +46,7 @@ public class BallPanel extends JPanel {
         add(radius);
 
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {

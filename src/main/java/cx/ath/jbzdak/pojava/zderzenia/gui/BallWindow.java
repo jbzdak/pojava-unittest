@@ -2,6 +2,7 @@ package cx.ath.jbzdak.pojava.zderzenia.gui;
 
 import cx.ath.jbzdak.pojava.zderzenia.Ball;
 import cx.ath.jbzdak.pojava.zderzenia.Engine;
+import cx.ath.jbzdak.pojava.zderzenia.SwingWorkerAnimationProvider;
 import cx.ath.jbzdak.pojava.zderzenia.translation.LocaleHolder;
 
 import javax.swing.*;
@@ -10,16 +11,18 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class BallWindow extends JFrame{
+
+    final Map<String, Class<? extends AnimationProvider>> providers = loadProviders();
 
     /**
      * Silnik wykonujący krok symulacji
      */
     Engine engine = new Engine(1, 1);
 
+    AnimationProvider provider = null;
 
     /**
      * Panel umożliwiający zmianę parametróe kulek i ich podgląd
@@ -30,6 +33,8 @@ public class BallWindow extends JFrame{
      * Tutaj będzie wyświetlana symulacja
      */
     final JPanel simulationArena = new JPanel();
+
+    final SimulationPanel2D simulationPanel2D;
 
     /**
      * Tworzy główny panel
@@ -43,14 +48,23 @@ public class BallWindow extends JFrame{
 
         setDefaultCloseOperation(BallWindow.DISPOSE_ON_CLOSE);
 
-        engine.fillWithBalls(ballCount, 1, 1);
+        engine.fillWithBalls(ballCount, 1, 0.05);
 
         setLayout(new BorderLayout());
 
         add(particleControlPanel, BorderLayout.WEST);
         add(simulationArena, BorderLayout.CENTER);
 
-        simulationArena.add(new JLabel("Tu będzie symulacja"), BorderLayout.CENTER);
+        simulationArena.setLayout(new BorderLayout());
+        simulationPanel2D = new SimulationPanel2D(engine);
+
+        simulationArena.add(simulationPanel2D, BorderLayout.CENTER);
+
+        provider = new ThreadAnimationProvider();
+
+        provider.setEngine(engine);
+        provider.setSimulationPanel(simulationPanel2D);
+
 
         recreateParticleControlPanel();
 
@@ -77,21 +91,34 @@ public class BallWindow extends JFrame{
             openImageIcon("control_stop_blue.png")
         );
 
-        menuBar.add(start);
+        JMenuItem selectAnimationProvider = new JMenuItem(
+                LocaleHolder.getTrans("BallWindow.menu.selectProvider")
+        );
 
+        selectAnimationProvider(LocaleHolder.getTrans("BallWindow.provider.timer"));
+
+        menuBar.add(start);
         menuBar.add(stop);
+        menuBar.add(selectAnimationProvider);
 
         start.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(BallWindow.this, "To rozpoczęłoby symulację");
+                provider.start();
+            }
+        });
+
+        selectAnimationProvider.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BallWindow.this.queryUserForAnimationProvider();
             }
         });
 
         stop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(BallWindow.this, "To zatrzymałoby symylację");
+                provider.stop();
             }
         });
     }
@@ -132,7 +159,42 @@ public class BallWindow extends JFrame{
         revalidate();
     }
 
+    void queryUserForAnimationProvider(){
+        String provider = (String) JOptionPane.showInputDialog(
+                this,
+                LocaleHolder.getTrans("BallWindow.selectProvider"),
+                LocaleHolder.getTrans("BallWindow.selectProvider"),
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                providers.keySet().toArray(),
+                null
+        );
 
+        selectAnimationProvider(provider);
+
+    }
+
+
+    void selectAnimationProvider(String name){
+
+        if (this.provider != null){
+            this.provider.destroy();
+            this.provider = null;
+        }
+        Class<? extends AnimationProvider> selected =
+                providers.get(name);
+
+        try {
+            this.provider = selected.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e); // Nie powinno się zdarzyć!
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e); // Nie powinno się zdarzyć!
+        }
+
+        this.provider.setEngine(engine);
+        this.provider.setSimulationPanel(simulationPanel2D);
+    }
     /**
      * Wybiera locale.
      *
@@ -163,11 +225,19 @@ public class BallWindow extends JFrame{
             @Override
             public void run() {
                 BallWindow ballWindow = new BallWindow(10);
-                ballWindow.setVisible(true);
                 ballWindow.setSize(640, 480);
+                ballWindow.setVisible(true);
             }
         });
 
 
+    }
+
+    private static Map<String, Class<? extends AnimationProvider>>loadProviders(){
+        Map<String, Class<? extends AnimationProvider>> providers = new HashMap<String, Class<? extends AnimationProvider>>();
+        providers.put(LocaleHolder.getTrans("BallWindow.provider.timer"), TimerAnimationProvider.class);
+        providers.put(LocaleHolder.getTrans("BallWindow.provider.thread"), ThreadAnimationProvider.class);
+        providers.put(LocaleHolder.getTrans("BallWindow.provider.swing-worker"), SwingWorkerAnimationProvider.class);
+        return Collections.unmodifiableMap(providers);
     }
 }
