@@ -35,6 +35,8 @@ public class SimulationPanel2D extends JPanel {
          *
          * Main reason to do this is to show you that such thing as tranformations exist.
          *
+         * This is probably not worth the effort since everyting will appear upside down...
+         *
          */
 
         AffineTransform oldTransform = g2.getTransform();

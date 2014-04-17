@@ -38,7 +38,7 @@ public class TimerAnimationProvider extends AbstractAnimationProvider {
 
     @Override
     public void stop() {
-        super.stop();
+        super.stop();;
         //Stop the timer
         timer.stop();
     }

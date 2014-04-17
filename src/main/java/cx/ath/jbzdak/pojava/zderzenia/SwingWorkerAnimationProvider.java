@@ -21,6 +21,10 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
 
     void scheduleWorkerIteration(){
 
+        /**
+         * Now we create a working copy so calculations are not done on balls that are currently
+         * being displayed.
+         */
         final BallContainer workingCopy = SerializationUtils.clone(ballContainer);
 
         /**
@@ -54,6 +58,9 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
             protected void done() {
 
                 try {
+                    /**
+                     * Pass the calculation results to the ballContainer
+                     */
                     ballContainer.setBalls(get().getBalls());
                 } catch (InterruptedException e) {
                     return;
@@ -62,7 +69,7 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
                 }
 
                 /**
-                 * Repain the panel
+                 * Repaint the panel
                  */
                 simulationPanel2D.repaint();
                 /**
@@ -75,14 +82,15 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
             }
         };
 
-
+        /**
+         * Start the worker.
+         */
         currentWorker.execute();
     }
 
     @Override
     public void stop() {
         super.stop();
-        started=false;
         currentWorker.cancel(true);
     }
 }

@@ -249,6 +249,7 @@ public class BallWindow extends JFrame{
         providers.put(LocaleHolder.getTrans("BallWindow.provider.timer"), TimerAnimationProvider.class);
         providers.put(LocaleHolder.getTrans("BallWindow.provider.thread"), ThreadAnimationProvider.class);
         providers.put(LocaleHolder.getTrans("BallWindow.provider.swing-worker"), SwingWorkerAnimationProvider.class);
+        providers.put(LocaleHolder.getTrans("BallWindow.provider.not-working-thread"), NotWorkingThreadProvider.class);
         return Collections.unmodifiableMap(providers);
     }
 }
