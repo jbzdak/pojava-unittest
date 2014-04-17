@@ -1,5 +1,6 @@
 package cx.ath.jbzdak.pojava.zderzenia.gui;
 
+import cx.ath.jbzdak.pojava.zderzenia.BallContainer;
 import cx.ath.jbzdak.pojava.zderzenia.Engine;
 
 /**
@@ -11,6 +12,8 @@ public interface AnimationProvider {
      * Engine to do calculations.
      */
     void setEngine(Engine engine);
+
+    void setBallContainer(BallContainer ballContainer);
 
     /**
      * Panel to display calculations upon.
@@ -26,6 +29,12 @@ public interface AnimationProvider {
      * Methos to stop simulation (and animation)
      */
     void stop();
+
+    /**
+     *
+     * @return true if it was started (and not stopped).
+     */
+    boolean isStarted();
 
     /**
      * Destroy this instance

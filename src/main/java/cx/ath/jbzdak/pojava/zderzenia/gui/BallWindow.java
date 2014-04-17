@@ -1,6 +1,7 @@
 package cx.ath.jbzdak.pojava.zderzenia.gui;
 
 import cx.ath.jbzdak.pojava.zderzenia.Ball;
+import cx.ath.jbzdak.pojava.zderzenia.BallContainer;
 import cx.ath.jbzdak.pojava.zderzenia.Engine;
 import cx.ath.jbzdak.pojava.zderzenia.SwingWorkerAnimationProvider;
 import cx.ath.jbzdak.pojava.zderzenia.translation.LocaleHolder;
@@ -20,7 +21,9 @@ public class BallWindow extends JFrame{
     /**
      * Silnik wykonujący krok symulacji
      */
-    Engine engine = new Engine(1, 1);
+    Engine engine = new Engine();
+
+    BallContainer ballContainer = new BallContainer(1,1);
 
     AnimationProvider provider = null;
 
@@ -46,9 +49,9 @@ public class BallWindow extends JFrame{
 
         setTitle(LocaleHolder.getTrans("BallWindow.title"));
 
-        setDefaultCloseOperation(BallWindow.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(BallWindow.EXIT_ON_CLOSE);
 
-        engine.fillWithBalls(ballCount, 1, 0.05);
+        ballContainer.fillWithBalls(ballCount, 1, 0.05);
 
         setLayout(new BorderLayout());
 
@@ -56,7 +59,7 @@ public class BallWindow extends JFrame{
         add(simulationArena, BorderLayout.CENTER);
 
         simulationArena.setLayout(new BorderLayout());
-        simulationPanel2D = new SimulationPanel2D(engine);
+        simulationPanel2D = new SimulationPanel2D(ballContainer);
 
         simulationArena.add(simulationPanel2D, BorderLayout.CENTER);
 
@@ -148,7 +151,7 @@ public class BallWindow extends JFrame{
         scrollPane.setViewportView(internal);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        List<Ball> balls = engine.getBalls();
+        List<Ball> balls = ballContainer.getBalls();
         internal.setLayout(new GridLayout(balls.size(), 1));
 
         for(int ii=0; ii < balls.size(); ii++){
@@ -177,12 +180,19 @@ public class BallWindow extends JFrame{
 
     void selectAnimationProvider(String name){
 
+
+        Class<? extends AnimationProvider> selected =
+                providers.get(name);
+
+        if(selected == null){
+            return;
+        }
+
         if (this.provider != null){
             this.provider.destroy();
             this.provider = null;
         }
-        Class<? extends AnimationProvider> selected =
-                providers.get(name);
+
 
         try {
             this.provider = selected.newInstance();
@@ -194,6 +204,7 @@ public class BallWindow extends JFrame{
 
         this.provider.setEngine(engine);
         this.provider.setSimulationPanel(simulationPanel2D);
+        this.provider.setBallContainer(ballContainer);
     }
     /**
      * Wybiera locale.

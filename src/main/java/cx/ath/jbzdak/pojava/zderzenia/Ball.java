@@ -3,7 +3,13 @@ package cx.ath.jbzdak.pojava.zderzenia;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
-public class Ball {
+import java.io.Serializable;
+
+public class Ball implements Serializable {
+
+    private static final long serialVersionUID = 1;
+
+//    private static final long serialVersionUUID=1;
 
     double[] coords = new double[6];
 	
@@ -15,9 +21,6 @@ public class Ball {
         coords[0]+=coords[2]*dt;
         coords[1]+=coords[3]*dt;
     }
-
-
-    public Ball(){}
 
     /**
      * This is the copy constructor

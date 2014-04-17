@@ -1,26 +1,28 @@
 package cx.ath.jbzdak.pojava.zderzenia;
 
 import cx.ath.jbzdak.pojava.zderzenia.gui.AbstractAnimationProvider;
+import org.apache.commons.lang3.SerializationUtils;
 
 import javax.swing.SwingWorker;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Swing worker animation provider.
  */
 public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
 
-
-    boolean started;
-
-    SwingWorker<Void, Void> currentWorker;
+    SwingWorker<BallContainer, Void> currentWorker;
 
     @Override
     public void start() {
-        started=true;
+        super.start();
         scheduleWorkerIteration();
     }
 
     void scheduleWorkerIteration(){
+
+        final BallContainer workingCopy = SerializationUtils.clone(ballContainer);
+
         /**
          * Swing worker implements following use case: we do some calculations in the backhround thread
          * and then we do something with the resuts (in this case results are not used, as they are
@@ -35,21 +37,30 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
          * and then display them (from EDT).
          *
          */
-        currentWorker = new SwingWorker<Void, Void>() {
+        currentWorker = new SwingWorker<BallContainer, Void>() {
             @Override
-            protected Void doInBackground() throws Exception {
+            protected BallContainer doInBackground() throws Exception {
                 /**
                  * Perform calculations in background.
                  */
                 for(int ii = 0; ii < 10; ii++){
-                    engine.iterate(0.01);
+                    engine.iterate(workingCopy, 0.01);
                     System.out.print("x");
                 }
-                return null;
+                return workingCopy;
             }
 
             @Override
             protected void done() {
+
+                try {
+                    ballContainer.setBalls(get().getBalls());
+                } catch (InterruptedException e) {
+                    return;
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+
                 /**
                  * Repain the panel
                  */
@@ -70,6 +81,7 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
 
     @Override
     public void stop() {
+        super.stop();
         started=false;
         currentWorker.cancel(true);
     }

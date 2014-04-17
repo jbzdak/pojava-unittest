@@ -22,7 +22,7 @@ public class TimerAnimationProvider extends AbstractAnimationProvider {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (engine != null){
-                    engine.iterate(0.05);
+                    engine.iterate(ballContainer, 0.05);
                     simulationPanel2D.repaint();
                 }
             }
@@ -31,12 +31,14 @@ public class TimerAnimationProvider extends AbstractAnimationProvider {
 
     @Override
     public void start() {
+        super.start();
         // Just start the timer
         timer.start();
     }
 
     @Override
     public void stop() {
+        super.stop();
         //Stop the timer
         timer.stop();
     }

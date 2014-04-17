@@ -1,20 +1,23 @@
 package cx.ath.jbzdak.pojava.zderzenia.gui;
 
 import cx.ath.jbzdak.pojava.zderzenia.Ball;
-import cx.ath.jbzdak.pojava.zderzenia.Engine;
+import cx.ath.jbzdak.pojava.zderzenia.BallContainer;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 
 public class SimulationPanel2D extends JPanel {
 
 
-    final Engine engine;
+    final BallContainer engine;
 
-    public SimulationPanel2D(Engine engine) {
+    public SimulationPanel2D(BallContainer engine) {
         super();
         this.engine = engine;
     }
@@ -84,12 +87,12 @@ public class SimulationPanel2D extends JPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                Engine engine = new Engine(1, 1);
-                engine.fillWithBalls(10, 1, 0.04);
+                BallContainer container = new BallContainer(1, 1);
+                container.fillWithBalls(10, 1, 0.05);
                 JFrame jFrame = new JFrame();
                 jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 jFrame.setLayout(new BorderLayout());
-                jFrame.add(new SimulationPanel2D(engine), BorderLayout.CENTER);
+                jFrame.add(new SimulationPanel2D(container), BorderLayout.CENTER);
                 jFrame.setSize(640, 480);
                 jFrame.setVisible(true);
             }

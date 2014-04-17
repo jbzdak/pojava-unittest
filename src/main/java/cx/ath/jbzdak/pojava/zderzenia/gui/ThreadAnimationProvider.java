@@ -56,6 +56,8 @@ public class ThreadAnimationProvider extends AbstractAnimationProvider {
     @Override
     public void start() {
 
+        super.start();
+
         /**
          * Basically you shouldn't kill a thread forcibly, you should only ask "dear thread please die".
          * In this example I do it using interrupts. So if thread reclieves interrupt it'll die.
@@ -70,7 +72,7 @@ public class ThreadAnimationProvider extends AbstractAnimationProvider {
                     System.out.print("x");
                     threadLock.lock();
                     try{
-                        engine.iterate(0.01);
+                        engine.iterate(ballContainer, 0.01);
                         Thread.sleep(1); //If thread was interrupted we finish it.
                     } catch (InterruptedException e) {
                         return;
@@ -88,6 +90,7 @@ public class ThreadAnimationProvider extends AbstractAnimationProvider {
 
     @Override
     public void stop() {
+        super.stop();
         repaintTimer.stop();
         calculationThread.interrupt(); //Ask theread to die
         try {
