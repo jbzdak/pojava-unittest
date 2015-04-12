@@ -8,22 +8,23 @@ public class BallUtils{
 
     public static double distance(Ball b1, Ball b2){
         return Math.sqrt(
-            Math.pow(
-               b1.getX()-b2.getX(), 2
-            ) +
-            Math.pow(
-                b1.getY()-b2.getY(), 2
-            )
-        );
+            Math.pow(b1.getX()-b2.getX(), 2) +
+            Math.pow(b1.getY()-b2.getY(), 2));
     }
 
     public static boolean overlaps(Ball b1, Ball b2){
         return distance(b1, b2) <= (b1.getRadius() + b2.getRadius());
     }
 
-//    static Rotation calculateRotationForCollision(Ball balla, Ball ballb){
-//
-//    }
+
+    /**
+     * Simplest case of collision. Collision in 1d with stationary object
+     */
+    static ImmutablePair<Double, Double> makeCollision1D(double v1, double m1, double m2){
+        double v1after = -2*m1*v1/(m1 + m2) + v1;
+        double v2after = 2*m1*v1/(m1 + m2);
+        return new ImmutablePair<Double, Double>(v1after, v2after);
+    }
 
     /**
      * This performs a collison of two balls.
@@ -71,41 +72,5 @@ public class BallUtils{
     }
 
 
-    /**
-     * Simplest case of collision. Collision in 1d with stationary object
-     */
-    static ImmutablePair<Double, Double> makeCollision1D(double v1, double m1, double m2){
-        double v1after = -2*m1*v1/(m1 + m2) + v1;
-        double v2after = 2*m1*v1/(m1 + m2);
-        return new ImmutablePair<Double, Double>(v1after, v2after);
-    }
 
-
-//    static Rotation calculateRotationForCollision(Ball balla, Ball ballb){
-//        Vector3D b1 = balla.getPosition();
-//        Vector3D b2 = ballb.getPosition();
-//
-//        Vector3D centerVector = b1.subtract(b2);
-//        double distance = centerVector.getNorm();
-//
-//        Rotation rotation = new Rotation(centerVector, new Vector3D(distance, 0, 0));
-//        return rotation;
-//    }
-//
-//    CollisionEvent collideBalls(Ball balla, Ball ballb){
-//
-//
-//        Vector3D b1rotated = rotation.applyTo(b1);
-//        Vector3D b2rotated = rotation.applyTo(b2);
-//
-//
-//
-//
-//
-//
-//    }
-//
-//    CollisionEvent collide1D(double x1, double x2, double v1, double v2){
-//
-//    }
 }

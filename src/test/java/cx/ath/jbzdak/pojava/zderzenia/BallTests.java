@@ -8,6 +8,13 @@ import org.junit.Test;
 public class BallTests {
 
     @Test
+    public void testBallPosition(){
+        Ball ball = new Ball(1, 2, 3, 4, 5, 6);
+        Assert.assertEquals(ball.getX(), 1, 0.001);
+        Assert.assertEquals(ball.getY(), 2, 0.001);
+    }
+
+    @Test
     public void testMove(){
         Ball ball = new Ball(0, 0, 1, 2, 5, 1);
         ball.iteration(0.1);
@@ -60,8 +67,8 @@ public class BallTests {
 
     @Test
     public void testColliosion(){
-        Ball b1 = new Ball(0, 0, 0, 1, 0, 1);
-        Ball b2 = new Ball(0, 2, 0, -1, 0, 1);
+        Ball b1 = new Ball(0, 0, 0, 1, 1, 1);
+        Ball b2 = new Ball(0, 2, 0, -1, 1, 1);
         b1.collision(b2);
         Assert.assertEquals(b1.getVX(), 0, 0.001);
         Assert.assertEquals(b2.getVX(), 0, 0.001);

@@ -9,17 +9,10 @@ public class Ball implements Serializable {
 
     private static final long serialVersionUID = 1;
 
-//    private static final long serialVersionUUID=1;
-
     double[] coords = new double[6];
 	
 	public Ball(double x, double y, double vx, double vy, double mass, double radius){
         coords = new double[]{x, y, vx, vy, mass, radius};
-    }
-
-	public void iteration(double dt){
-        coords[0]+=coords[2]*dt;
-        coords[1]+=coords[3]*dt;
     }
 
     /**
@@ -31,6 +24,11 @@ public class Ball implements Serializable {
                 ball.coords, 0,
                 coords, 0, coords.length
         );
+    }
+
+	public void iteration(double dt){
+        coords[0]+=coords[2]*dt;
+        coords[1]+=coords[3]*dt;
     }
 
     public void collision(Ball other){
@@ -56,7 +54,6 @@ public class Ball implements Serializable {
         return new Vector3D(getX(), getY(), 0);
     }
 
-
     Vector3D getVelocity(){
         return new Vector3D(getVX(), getVY(), 0);
     }
@@ -69,21 +66,20 @@ public class Ball implements Serializable {
         return coords[1];
     }
 
+    public double getVX(){
+        return coords[2];
+    }
+
+    public double getVY(){
+        return coords[3];
+    }
+
     public double getRadius(){
         return coords[5];
     }
 
     public double getMass(){
         return coords[4];
-    }
-
-    public double getVX(){
-        return coords[2];
-    }
-
-
-    public double getVY(){
-        return coords[3];
     }
 
     protected void setVX(double value){
@@ -93,6 +89,5 @@ public class Ball implements Serializable {
     protected void setVY(double value){
         coords[3] = value;
     }
-
 
 }

@@ -20,7 +20,6 @@ public class NotWorkingThreadProvider extends AbstractAnimationProvider {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (engine != null){
-                    engine.iterate(ballContainer, 0.05);
                     simulationPanel2D.repaint();
                 }
             }

@@ -49,7 +49,7 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
                  */
                 for(int ii = 0; ii < 10; ii++){
                     engine.iterate(workingCopy, 0.01);
-                    System.out.print("x");
+//                    System.out.print("x");
                 }
                 return workingCopy;
             }
@@ -78,7 +78,7 @@ public class SwingWorkerAnimationProvider extends AbstractAnimationProvider {
                 if(started){
                     scheduleWorkerIteration();
                 }
-                System.out.print("y\n");
+//                System.out.print("y\n");
             }
         };
 
